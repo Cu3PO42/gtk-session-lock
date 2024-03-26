@@ -18,7 +18,7 @@
 void gtk_priv_assert_gtk_version_valid() {
     if (gtk_get_major_version() != 3 || gtk_get_minor_version() < 22) {
         g_error(
-            "gtk-layer-shell only supports GTK3 >= v3.22.0 (you have v%d.%d.%d)",
+            "gtk-session-lock only supports GTK3 >= v3.22.0 (you have v%d.%d.%d)",
             gtk_get_major_version(),
             gtk_get_minor_version(),
             gtk_get_micro_version());
@@ -30,14 +30,14 @@ void gtk_priv_warn_gtk_version_may_be_unsupported() {
     static gboolean shown = FALSE;
     if (shown)
         return;
-    if (getenv("GTK_LAYER_SHELL_UNSUPPORTED_GTK_WARNING")) {
+    if (getenv("GTK_SESSION_LOCK_UNSUPPORTED_GTK_WARNING")) {
         g_warning(
-            "gtk-layer-shell v%d.%d.%d may not work on GTK v%d.%d.%d. "
+            "gtk-ession-lock v%d.%d.%d may not work on GTK v%d.%d.%d. "
             "If you experience crashes, check "
-            "https://github.com/wmww/gtk-layer-shell/blob/master/compatibility.md",
-            GTK_LAYER_SHELL_MAJOR,
-            GTK_LAYER_SHELL_MINOR,
-            GTK_LAYER_SHELL_MICRO,
+            "https://github.com/Cu3PO42/gtk-session-lock/blob/master/compatibility.md",
+            GTK_SESSION_LOCK_MAJOR,
+            GTK_SESSION_LOCK_MINOR,
+            GTK_SESSION_LOCK_MICRO,
             gtk_get_major_version(),
             gtk_get_minor_version(),
             gtk_get_micro_version());

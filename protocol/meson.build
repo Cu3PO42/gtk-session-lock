@@ -4,17 +4,15 @@ else
     prog_wayland_scanner = find_program('wayland-scanner')
 endif
 
-protocols = [
-    'wlr-layer-shell-unstable-v1.xml'
-]
+protocols = [ ]
 
 if wayland_protocols.found()
     protocols += join_paths(
         wayland_protocols.get_pkgconfig_variable('pkgdatadir'),
-        'stable/xdg-shell/xdg-shell.xml')
+        'staging/ext-session-lock/ext-session-lock-v1.xml')
 else
-    # use bundled xdg-shell.xml
-    protocols += 'xdg-shell.xml'
+    # use bundled protocols
+    protocols += 'ext-session-lock-v1.xml'
 endif
 
 gen_client_header = generator(prog_wayland_scanner,

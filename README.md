@@ -1,52 +1,37 @@
-# GTK Layer Shell (GTK3 version)
+# GTK Session Lock for GTK3
 
-![GTK Layer Shell demo screenshot](https://i.imgur.com/dIuYcBM.png)
+This is a library to use [GTK 3](https://www.gtk.org/) to build screen lockers using the secure [ext-session-lock-v1](https://wayland.app/protocols/ext-session-lock-v1) protocol. This Library is compatible with C, C++ and any language that supports GObject introspection files (Python, Vala, etc, see using the library below).
 
-A library to write [GTK](https://www.gtk.org/) applications that use [Layer Shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml). Layer Shell is a Wayland protocol for desktop shell components, such as panels, notifications and wallpapers. You can use it to anchor your windows to a corner or edge of the output, or stretch them across the entire output. It supports all Layer Shell features including popups and popovers (GTK popups Just Work™). This Library is compatible with C, C++ and any language that supports GObject introspection files (Python, Vala, etc, see using the library below).
-
-[Documentation](https://wmww.github.io/gtk-layer-shell/)
-
-[GTK4 version](https://github.com/wmww/gtk4-layer-shell)
+This library is a fork of the incrediable [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell), which has laid all the groundwork necessary to make this happen.
 
 ## Reporting Bugs
-To report a crash or other problem using this library open a new [issue on Github](https://github.com/wmww/gtk-layer-shell/issues). Try to include a minimum reproducer if possible (ideally in C). **DO NOT REPORT GTK LAYER SHELL BUGS TO UPSTREAM GTK**. If you can reproduce the problem without including or linking to the gtk-layer-shell library **at all** then and only then report it to GTK instead of here.
+To report a crash or other problem using this library open a new [issue on Github](https://github.com/Cu3PO42/gtk-session-lock/issues). Try to include a minimum reproducer if possible (ideally in C). **DO NOT REPORT GTK SESSION LOCK BUGS TO UPSTREAM GTK**. If you can reproduce the problem without including or linking to the gtk-session-lock library **at all** then and only then report it to GTK instead of here.
 
 ## Supported Desktops
-This library only works on Wayland, and only on Wayland compositors that support the Layer Shell protocol. Layer shell __is supported__ on:
-- wlroots based compositors (such as __Sway__)
-- __KDE Plasma__ on wayland
-- __Mir__-based compositors (some may not enable the protocol by default and require `--add-wayland-extension zwlr_layer_shell_v1`)
+This library only works on Wayland, and only on Wayland compositors that support the ext-session-lock-v1 protocol. Session lock __is supported__ on:
 
-Layer shell __is not supported__ on:
+- wlroots based compositors (such as __Sway__ or __Hyprland__)
+- __Mir__-based compositors
+
+ext-session-lock-v1 __is not supported__ on:
 - Gnome-on-Wayland
+- KDE Plasma
 - Any X11 desktop
 
 ## Using the Library
-### Demo
-`gtk-layer-demo` is built if examples are enabled. Its UI exposes all features of the library, and it's useful for testing layer shell support in compositors. Its code can be found in [examples/demo/](examples/demo/).
 
 ### C/C++
-The easiest way to build against GTK Layer Shell is to use the `gtk-layer-shell-0` pkg-config package. Refer to your build system or the pkg-config docs for further instructions. [examples/simple-example.c](examples/simple-example.c) is a minimal complete app written in C.
+The easiest way to build against GTK Session Lock is to use the `gtk-session-lock-0` pkg-config package. Refer to your build system or the pkg-config docs for further instructions. [examples/simple-example.c](examples/simple-example.c) is a minimal complete app written in C.
 
-### Python
-[examples/simple-example.py](examples/simple-example.py) contains sample Python code.
+### Other Languages
 
-### Vala
-[examples/vala-standalone](examples/vala-standalone) contains a minimal working standalone Vala project, see [the readme](examples/vala-standalone/README.md) for details.
-
-### Rust
-[@pentamassiv](https://github.com/pentamassiv) maintains [safe Rust bindings](https://github.com/pentamassiv/gtk-layer-shell-gir) and the [crates.io crate](https://crates.io/crates/gtk-layer-shell/). Rust examples can be found [here](https://github.com/pentamassiv/gtk-layer-shell-gir/tree/main/gtk-layer-shell/examples).
-
-### Ruby
-[mswiger](https://github.com/mswiger) maintains [Ruby bindings](https://github.com/mswiger/ruby-gtk-layer-shell) which are published to [RubyGems](https://rubygems.org/gems/gtk_layer_shell).
-
-## Distro Packages
-[![List of distros GTK Layer Shell is packaged for](https://repology.org/badge/vertical-allrepos/gtk-layer-shell.svg)](https://repology.org/project/gtk-layer-shell/versions)
+The library can be used from any language supporting GObject Introspection.
+Please refer to the docs for your respective language for instructions.
 
 ## Building From Source
 1. Clone this repo
 2. Install build dependencies (see below)
-3. `$ meson setup -Dexamples=true -Ddocs=true -Dtests=true build`
+3. `$ meson setup build`
 4. `$ ninja -C build`
 5. `$ sudo ninja -C build install`
 6. `$ sudo ldconfig`
@@ -56,33 +41,21 @@ The easiest way to build against GTK Layer Shell is to use the `gtk-layer-shell-
 * [libwayland](https://gitlab.freedesktop.org/wayland/wayland) (>=1.10.0)
 * [GTK3](https://www.gtk.org/) (>=3.22.0)
 * [GObject introspection](https://gitlab.gnome.org/GNOME/gobject-introspection/)
-* [GTK Doc](https://www.gtk.org/gtk-doc/) (only required if docs are enabled)
 * [Vala](https://wiki.gnome.org/Projects/Vala) (only required if vapi is enabled)
 
-To install these dependencies on Ubuntu 18.04 and later:
+The only officially supported way to build GTK Session Lock is via the included Nix Flake.
+You can also obtain these dependencies for development purposes by starting a shell with `nix develop .#`.
+
+The following may or may not work on Ubuntu 18.04 and later:
 ```
 sudo apt install meson libwayland-dev libgtk-3-dev gobject-introspection libgirepository1.0-dev gtk-doc-tools valac
 ```
 
 ### Meson Options
-* `-Dexamples` (default `false`): If to build the example C apps; gtk-layer-demo is installed if examples are built; The Vala example is never built with the rest of the project
-* `-Ddocs` (default `false`): If to generate the docs
-* `-Dtests` (default `false`): If to build the tests
 * `-Dintrospection` (default: `true`): If to build GObject Introspection data (used for bindings to languages other than C/C++)
 * `-Dvapi` (default: `true`): If to build VAPI data (allows this library to be used in Vala). Requires `-Dintrospection=true`
 
-### Running the Tests
-* `ninja -C build test`
-
 ## Licensing
-GTK Layer Shell is licensed under the GNU Lesser General Public License version 3.0 or any later version.
+GTK Session Lock is licensed under the GNU General Public License version 3.0 or any later version approved by me (Cu3PO42).
 
-Most of the individual source files are licensed under MIT.
-
-To prevent possible future confusion, all contributions must contain the following in the PR message: *By opening this pull request, I agree for my modifications to be licensed under whatever licenses are indicated at the start of the files I modified*
-
-### Licensing Rationale
-I want everyone to be able to use GTK Layer Shell however they desire, but parts of it are extracted from GTK. Therefore, the project as a whole is licensed under [GNU Lesser General Public License (LGPL) version 3](https://www.gnu.org/licenses/lgpl-3.0.en.html) or any later version (a newer version of the same license as GTK). See [LICENSE_LGPL.txt](LICENSE_LGPL.txt) and [LICENSE_GPL.txt](LICENSE_GPL.txt) for details. Almost all of the non-generated code, however, is licensed under [MIT](https://en.wikipedia.org/wiki/MIT_License) ([LICENSE_MIT.txt](LICENSE_MIT.txt)). At the top of each file should be a header that specifies which license applies to it. Please refer to that if in doubt.
-
-### What This Means For You
-This library can be linked against under similar terms as GTK itself, so licensing shouldn't be a problem for most potential users. Furthermore, most of the code within this library can be used in permissively licensed or proprietary projects.
+Some source files, which are entirely or almost entirely unmodified from the original gtk-layer-shell are also available under the terms of the MIT license.

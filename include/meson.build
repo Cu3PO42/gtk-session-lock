@@ -1,3 +1,3 @@
-gtk_layer_shell_inc = include_directories('.')
+gtk_session_lock_inc = include_directories('.')
 
-install_headers('gtk-layer-shell.h', subdir: 'gtk-layer-shell')
+install_headers('gtk-session-lock.h', subdir: 'gtk-session-lock')

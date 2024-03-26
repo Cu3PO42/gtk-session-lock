@@ -56,10 +56,10 @@ static void create_debug_control_window()
 {
     // Make a window with a continue button for debugging
     GtkWindow* window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
-    gtk_layer_init_for_window(window);
-    gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, TRUE);
-    gtk_layer_set_margin(window, GTK_LAYER_SHELL_EDGE_BOTTOM, 200);
-    gtk_layer_set_layer(window, GTK_LAYER_SHELL_LAYER_OVERLAY);
+    gtk_session_lock_init_for_window(window);
+    gtk_session_lock_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, TRUE);
+    gtk_session_lock_set_margin(window, GTK_LAYER_SHELL_EDGE_BOTTOM, 200);
+    gtk_session_lock_set_layer(window, GTK_LAYER_SHELL_LAYER_OVERLAY);
     GtkWidget* button = gtk_button_new_with_label("Continue ->");
     g_signal_connect (button, "clicked", G_CALLBACK(continue_button_callback), NULL);
     gtk_container_add(GTK_CONTAINER(window), button);

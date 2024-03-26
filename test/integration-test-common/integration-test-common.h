@@ -12,7 +12,7 @@
 #ifndef TEST_CLIENT_COMMON_H
 #define TEST_CLIENT_COMMON_H
 
-#include "gtk-layer-shell.h"
+#include "gtk-session-lock.h"
 #include "test-common.h"
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>

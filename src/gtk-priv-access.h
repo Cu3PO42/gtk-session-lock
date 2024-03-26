@@ -16,22 +16,8 @@
 #include <gtk/gtk.h>
 #include <stdint.h>
 
-// This only has an effect the first time it's called
-// It enables gtk_window_hack_get_position () working later
-void gtk_priv_access_init (GdkWindow *gdk_window);
-
-// Returns the laster serial from a user input event
-// Can be used for popups grabs and such
-uint32_t gdk_window_get_priv_latest_serial (GdkSeat *seat);
-
-// Returns the GdkSeat that can be used for popup grabs
-GdkSeat *gdk_window_get_priv_grab_seat (GdkWindow *gdk_window);
-
 // Sets the window as mapped (mapped is set to false automatically in gdk_wayland_window_hide_surface ())
 // If window is not set to mapped, some subsurfaces fail (see https://github.com/wmww/gtk-layer-shell/issues/38)
 void gdk_window_set_priv_mapped (GdkWindow *gdk_window);
-
-// Gets the window geometry (area inside the window that excludes the shadow)
-GdkRectangle gtk_window_get_priv_logical_geom (GtkWindow *widget);
 
 #endif // GDK_WINDOW_HACK_H

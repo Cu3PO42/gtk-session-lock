@@ -14,6 +14,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include <stdbool.h>
 
 struct wl_surface;
 struct xdg_surface;
@@ -27,6 +28,7 @@ struct _CustomShellSurfaceVirtual
 {
     // Called during the window's gtk signal of the same name
     // Should create the wayland objects needed to map the surface
+    // If true, immediately commit.
     void (*map) (CustomShellSurface *super, struct wl_surface *wl_surface);
 
     // Must be called before the associated GtkWindow is unmapped
@@ -34,13 +36,6 @@ struct _CustomShellSurfaceVirtual
 
     // Will usually call unmap; can be the same function if no other resources need to be freed
     void (*finalize) (CustomShellSurface *super);
-
-    struct xdg_popup *(*get_popup) (CustomShellSurface *super,
-                                    struct xdg_surface *popup_xdg_surface,
-                                    struct xdg_positioner *positioner);
-
-    // Returns the logical geometry of the window (excludes shadows and such)
-    GdkRectangle (*get_logical_geom) (CustomShellSurface *super);
 };
 
 struct _CustomShellSurface

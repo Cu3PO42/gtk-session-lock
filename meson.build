@@ -1,7 +1,7 @@
-project('gtk-layer-shell',
+project('gtk-session-lock',
     ['c'],
-    version: '0.8.2',
-    license: 'LGPLv3',
+    version: '0.1.0',
+    license: 'GPLv3',
     meson_version: '>=0.45.1',
     default_options: ['c_std=gnu11', 'warning_level=3'])
 
@@ -31,15 +31,11 @@ subdir('protocol')
 subdir('gtk-priv')
 subdir('src')
 
-gtk_layer_shell = declare_dependency(
-    link_with: gtk_layer_shell_lib,
-    include_directories: gtk_layer_shell_inc)
+gtk_session_lock = declare_dependency(
+    link_with: gtk_session_lock_lib,
+    include_directories: gtk_session_lock_inc)
 
-subdir('examples')
-
-if get_option('docs')
-    subdir('doc')
-endif
+#subdir('examples')
 
 if get_option('tests')
     subdir('test')

@@ -6,7 +6,7 @@ This was originally developed as a standalone project under the name gtk3-espion
 
 ## Building the headers
 
-__NOTE: you don't need to rebuild the headers in order to build GTK Layer Shell__. Building the header files is only required when GTK has been updated or a structure is added.
+__NOTE: you don't need to rebuild the headers in order to build GTK Session Lock__. Building the header files is only required when GTK has been updated or a structure is added.
 
 To build, run `./scripts/build.py`
 
