@@ -73,7 +73,7 @@ struct ext_session_lock_surface_v1 *gtk_session_lock_get_ext_session_lock_surfac
 G_DECLARE_FINAL_TYPE(GtkSessionLockLock, gtk_session_lock_lock, GTK_SESSION_LOCK, LOCK, GObject)
 
 /**
- * gtk_session_lock_manager_prepare_lock:
+ * gtk_session_lock_prepare_lock:
  *
  * Prepare a new #SessionLockLock. You should connect signals to it before
  * calling its lock method.
