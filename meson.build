@@ -35,7 +35,7 @@ gtk_session_lock = declare_dependency(
     link_with: gtk_session_lock_lib,
     include_directories: gtk_session_lock_inc)
 
-#subdir('examples')
+subdir('examples')
 
 if get_option('tests')
     subdir('test')
