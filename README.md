@@ -18,6 +18,13 @@ ext-session-lock-v1 __is not supported__ on:
 - KDE Plasma
 - Any X11 desktop
 
+## Limitations
+
+The ext-session-lock-v1 protocol can only show one surface per monitor.
+This means, only one window can be shown, therefore popups aren't supported.
+Unfortunately, tooltips are also new windows and do not work.
+This is an inherent and can only be worked around, not resolved.
+
 ## Using the Library
 
 ### C/C++
@@ -27,6 +34,10 @@ The easiest way to build against GTK Session Lock is to use the `gtk-session-loc
 
 The library can be used from any language supporting GObject Introspection.
 Please refer to the docs for your respective language for instructions.
+
+## Examples
+
+kotontrion has kindly contributed C and Python examples, which you can find in the `examples/` subdirectory.
 
 ## Building From Source
 1. Clone this repo
