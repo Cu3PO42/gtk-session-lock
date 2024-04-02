@@ -2,7 +2,7 @@
 
 This is a library to use [GTK 3](https://www.gtk.org/) to build screen lockers using the secure [ext-session-lock-v1](https://wayland.app/protocols/ext-session-lock-v1) protocol. This Library is compatible with C, C++ and any language that supports GObject introspection files (Python, Vala, etc, see using the library below).
 
-This library is a fork of the incrediable [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell), which has laid all the groundwork necessary to make this happen.
+This library is a fork of the incredible [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell), which has laid all the groundwork necessary to make this happen.
 
 ## Reporting Bugs
 To report a crash or other problem using this library open a new [issue on Github](https://github.com/Cu3PO42/gtk-session-lock/issues). Try to include a minimum reproducer if possible (ideally in C). **DO NOT REPORT GTK SESSION LOCK BUGS TO UPSTREAM GTK**. If you can reproduce the problem without including or linking to the gtk-session-lock library **at all** then and only then report it to GTK instead of here.
