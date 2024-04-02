@@ -18,6 +18,8 @@
 
 #include <gdk/gdkwayland.h>
 
+#pragma GCC visibility push(protected)
+
 guint
 gtk_session_lock_get_major_version ()
 {

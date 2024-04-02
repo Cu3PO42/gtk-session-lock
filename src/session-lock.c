@@ -1,10 +1,11 @@
-
 #include "../include/gtk-session-lock.h"
 
 #include "gtk-wayland.h"
 #include "lock-surface.h"
 
 #include "ext-session-lock-v1-client.h"
+
+#pragma GCC visibility push(protected)
 
 GtkSessionLockLock *gtk_session_lock_prepare_lock (void)
 {
