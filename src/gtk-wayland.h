@@ -20,6 +20,4 @@ struct ext_session_lock_manager_v1 *gtk_wayland_get_session_lock_manager_global 
 
 void gtk_wayland_init_if_needed (void);
 
-GtkWindow *gtk_wayland_gdk_to_gtk_window (GdkWindow *gdk_window);
-
 #endif // WAYLAND_GLOBALS_H

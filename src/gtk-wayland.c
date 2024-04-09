@@ -20,8 +20,6 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkwayland.h>
 
-static const char *gtk_window_key = "linked-gtk-window";
-
 static struct wl_registry *wl_registry_global = NULL;
 static struct ext_session_lock_manager_v1 *lock_manager_global = NULL;
 
@@ -74,23 +72,6 @@ static const struct wl_registry_listener wl_registry_listener = {
     .global_remove = wl_registry_handle_global_remove,
 };
 
-// This function associates a GTK window with a GDK window
-// It overrides the default so it can run for EVERY window without needed to be attached to each one
-static void
-gtk_wayland_override_on_window_realize (GtkWindow *gtk_window, void *_data)
-{
-    (void)_data;
-
-    // Call the super class's realize handler
-    GValue args[1] = { G_VALUE_INIT };
-    g_value_init_from_instance (&args[0], gtk_window);
-    g_signal_chain_from_overridden (args, NULL);
-    g_value_unset (&args[0]);
-
-    GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (gtk_window));
-    g_object_set_data (G_OBJECT (gdk_window), gtk_window_key, gtk_window);
-}
-
 // This callback must override the default unmap handler, so it can run first
 // The custom surface's unmap method must be called before GtkWidget's unmap, or Wayland objects are destroyed in the wrong order
 static void
@@ -127,19 +108,9 @@ gtk_wayland_init_if_needed ()
     if (!lock_manager_global)
         g_warning ("It appears your Wayland compositor does not support the Session Lock protocol");
 
-    gint realize_signal_id = g_signal_lookup ("realize", GTK_TYPE_WINDOW);
-    GClosure *realize_closure = g_cclosure_new (G_CALLBACK (gtk_wayland_override_on_window_realize), NULL, NULL);
-    g_signal_override_class_closure (realize_signal_id, GTK_TYPE_WINDOW, realize_closure);
-
     gint unmap_signal_id = g_signal_lookup ("unmap", GTK_TYPE_WINDOW);
     GClosure *unmap_closure = g_cclosure_new (G_CALLBACK (gtk_wayland_override_on_window_unmap), NULL, NULL);
     g_signal_override_class_closure (unmap_signal_id, GTK_TYPE_WINDOW, unmap_closure);
 
     has_initialized = TRUE;
-}
-
-GtkWindow *
-gtk_wayland_gdk_to_gtk_window (GdkWindow *gdk_window)
-{
-    return GTK_WINDOW (g_object_get_data (G_OBJECT (gdk_window), gtk_window_key));
 }
