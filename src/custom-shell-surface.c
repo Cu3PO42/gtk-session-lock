@@ -121,6 +121,12 @@ custom_shell_surface_needs_commit (CustomShellSurface *self)
 }
 
 void
+custom_shell_surface_unmap (CustomShellSurface *self)
+{
+    self->virtual->unmap (self);
+}
+
+void
 custom_shell_surface_remap (CustomShellSurface *self)
 {
     GtkWidget *window_widget = GTK_WIDGET (self->private->gtk_window);

@@ -94,3 +94,13 @@ gtk_session_lock_get_lock_surface (GtkWindow *window)
     if (!lock_surface) return NULL; // Error message already shown in gtk_window_get_lock_surface
     return lock_surface->lock_surface;
 }
+
+void
+gtk_session_lock_unmap_lock_window (GtkWindow *window)
+{
+    g_return_if_fail (window);
+    CustomShellSurface *shell_surface = gtk_window_get_custom_shell_surface (window);
+    if (!shell_surface)
+        return;
+    custom_shell_surface_unmap (shell_surface);
+}

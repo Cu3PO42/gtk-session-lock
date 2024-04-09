@@ -72,24 +72,6 @@ static const struct wl_registry_listener wl_registry_listener = {
     .global_remove = wl_registry_handle_global_remove,
 };
 
-// This callback must override the default unmap handler, so it can run first
-// The custom surface's unmap method must be called before GtkWidget's unmap, or Wayland objects are destroyed in the wrong order
-static void
-gtk_wayland_override_on_window_unmap (GtkWindow *gtk_window, void *_data)
-{
-    (void)_data;
-
-    CustomShellSurface *shell_surface = gtk_window_get_custom_shell_surface (gtk_window);
-    if (shell_surface)
-        shell_surface->virtual->unmap (shell_surface);
-
-    // Call the super class's unmap handler
-    GValue args[1] = { G_VALUE_INIT };
-    g_value_init_from_instance (&args[0], gtk_window);
-    g_signal_chain_from_overridden (args, NULL);
-    g_value_unset (&args[0]);
-}
-
 void
 gtk_wayland_init_if_needed ()
 {
@@ -107,10 +89,6 @@ gtk_wayland_init_if_needed ()
 
     if (!lock_manager_global)
         g_warning ("It appears your Wayland compositor does not support the Session Lock protocol");
-
-    gint unmap_signal_id = g_signal_lookup ("unmap", GTK_TYPE_WINDOW);
-    GClosure *unmap_closure = g_cclosure_new (G_CALLBACK (gtk_wayland_override_on_window_unmap), NULL, NULL);
-    g_signal_override_class_closure (unmap_signal_id, GTK_TYPE_WINDOW, unmap_closure);
 
     has_initialized = TRUE;
 }

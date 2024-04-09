@@ -121,6 +121,16 @@ void gtk_session_lock_lock_unlock_and_destroy (GtkSessionLockLock *lock);
  */
 void gtk_session_lock_lock_new_surface (GtkSessionLockLock *lock, GtkWindow *gtk_window, GdkMonitor *monitor);
 
+/**
+ * gtk_session_lock_unmap_lock_window:
+ * 
+ * If the given window is a lock window, unmap the surface. This must be called
+ * before the window is unmapped (e.g. hidden).
+ *
+ * Since: 0.2
+ */
+void gtk_session_lock_unmap_lock_window (GtkWindow *window);
+
 G_END_DECLS
 
 #endif // GTK_SESSION_LOCK_H
