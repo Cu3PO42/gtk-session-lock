@@ -23,9 +23,30 @@ ext-session-lock-v1 __is not supported__ on:
 The ext-session-lock-v1 protocol can only show one surface per monitor.
 This means, only one window can be shown, therefore popups aren't supported.
 Unfortunately, tooltips are also new windows and do not work.
-This is an inherent and can only be worked around, not resolved.
+This is an inherent limitation and can only be worked around, not resolved.
 
 ## Using the Library
+
+### In the abstract
+
+The operations in this library need to be performed in a specific order to guarantee correct behavior.
+1. You SHOULD check for support of the `ext-session-lock-v1` protocl via the `gtk_session_lock_is_supported()` method.
+2. To lock the session, first prepare a lock via `gtk_session_lock_prepare_lock()`. The purpose of the prepare operation is to perform additional setup before actually performing the lock.
+3. You MUST connect to the lock's `locked` signal. You SHOULD connect to its `finished` signal.
+4. After correcting to signals, call the `gtk_session_lock_lock_lock(lock)` method.
+5. Proceed only once you receive a signal.
+6. If you receive the `finished` signal, the session could not be locked. You SHOULD call `gtk_session_lock_lock_destroy(lock)` to dispose of the Wayland objects and avoid memory leaks.
+7. If you receive the `locked` signal, your session is now locked. You SHOULD now create windows to be shown on your monitors.
+8. For every monitor:
+   1. Create a Gtk Window, but do not yet show it.
+   2. You MUST call `gtk_session_lock_lock_new_surface(lock, window, monitor)` to prepare the window for display on the given monitor before it is realized.
+   3. You SHOULD show (i.e. realize and map) the window as soon as possible. If you do not, the compositor will display a solid color.
+   4. You MUST NOT create two windows on the same monitor.
+9. You SHOULD listen to monitor connection and disconnection events and create new windows on demand.
+10. Before calling `hide` on the window, you MUST call `gtk_session_lock_unmap_lock_window(window)` on it. You MUST NOT call this method before `destroy`. This additional step is necessary to maintain compatibility with gtk-layer-shell.
+11. Once you wish to unlock the session, e.g. after you have authenticated the user, you SHOULD first call `gtk_session_lock_lock_unlock_and_destroy(lock)`.
+12. Subsequently you SHOULD destroy all windows you previously created as lock surfaces.
+13. Before exiting your application, you MUST wait for a Wayland display sync. To this end, call `gdk_display_sync(gdk_display_get_default())`.
 
 ### C/C++
 The easiest way to build against GTK Session Lock is to use the `gtk-session-lock-0` pkg-config package. Refer to your build system or the pkg-config docs for further instructions. [examples/simple-example.c](examples/simple-example.c) is a minimal complete app written in C.
