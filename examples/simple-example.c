@@ -27,17 +27,12 @@ static GtkWindow* create_lock_window() {
     return window;
 }
 
-static void activate (GtkApplication* app, void *_data) {
+static void on_finished(GtkSessionLockLock *lock, void *_data) {
+    printf("Finished event received. Session could not be locked.\n");
+    g_application_quit(G_APPLICATION(app));
+}
 
-    if (!gtk_session_lock_is_supported()) {
-        printf("Your Wayland compositor does not support the ext-session-lock protocol\n");
-        g_application_quit(G_APPLICATION(app));
-    }
-
-    lock = gtk_session_lock_prepare_lock();
-
-    gtk_session_lock_lock_lock(lock);
-    
+static void on_locked(GtkSessionLockLock *lock, void *_data) {
     GdkDisplay *display = gdk_display_get_default();
     for (int i = 0; i < gdk_display_get_n_monitors(display); ++i) {
         GdkMonitor *monitor = gdk_display_get_monitor(gdk_display_get_default(), i);
@@ -47,6 +42,20 @@ static void activate (GtkApplication* app, void *_data) {
 
         gtk_widget_show_all(GTK_WIDGET(window));  
     }
+}
+
+static void activate (GtkApplication* app, void *_data) {
+    if (!gtk_session_lock_is_supported()) {
+        printf("Your Wayland compositor does not support the ext-session-lock protocol\n");
+        g_application_quit(G_APPLICATION(app));
+    }
+
+    lock = gtk_session_lock_prepare_lock();
+
+    g_signal_connect(lock, "locked", G_CALLBACK (on_locked), NULL);
+    g_signal_connect(lock, "finished", G_CALLBACK (on_finished), NULL);
+
+    gtk_session_lock_lock_lock(lock);
 }
 
 int main (int argc, char **argv) {
