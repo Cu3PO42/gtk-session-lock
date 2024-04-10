@@ -33,15 +33,7 @@ static void on_finished(GtkSessionLockLock *lock, void *_data) {
 }
 
 static void on_locked(GtkSessionLockLock *lock, void *_data) {
-    GdkDisplay *display = gdk_display_get_default();
-    for (int i = 0; i < gdk_display_get_n_monitors(display); ++i) {
-        GdkMonitor *monitor = gdk_display_get_monitor(gdk_display_get_default(), i);
-        
-        GtkWindow *window = create_lock_window();
-        gtk_session_lock_lock_new_surface(lock, window, monitor);
-
-        gtk_widget_show_all(GTK_WIDGET(window));  
-    }
+    printf("Your session is now locked.\n");
 }
 
 static void activate (GtkApplication* app, void *_data) {
@@ -56,6 +48,16 @@ static void activate (GtkApplication* app, void *_data) {
     g_signal_connect(lock, "finished", G_CALLBACK (on_finished), NULL);
 
     gtk_session_lock_lock_lock(lock);
+
+    GdkDisplay *display = gdk_display_get_default();
+    for (int i = 0; i < gdk_display_get_n_monitors(display); ++i) {
+        GdkMonitor *monitor = gdk_display_get_monitor(display, i);
+        
+        GtkWindow *window = create_lock_window();
+        gtk_session_lock_lock_new_surface(lock, window, monitor);
+
+        gtk_widget_show_all(GTK_WIDGET(window));  
+    }
 }
 
 int main (int argc, char **argv) {

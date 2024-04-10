@@ -34,14 +34,13 @@ The operations in this library need to be performed in a specific order to guara
 2. To lock the session, first prepare a lock via `gtk_session_lock_prepare_lock()`. The purpose of the prepare operation is to perform additional setup before actually performing the lock.
 3. You MUST connect to the lock's `locked` signal. You SHOULD connect to its `finished` signal.
 4. After correcting to signals, call the `gtk_session_lock_lock_lock(lock)` method.
-5. Proceed only once you receive a signal.
 6. If you receive the `finished` signal, the session could not be locked. You SHOULD call `gtk_session_lock_lock_destroy(lock)` to dispose of the Wayland objects and avoid memory leaks.
-7. If you receive the `locked` signal, your session is now locked. You SHOULD now create windows to be shown on your monitors.
-8. For every monitor:
+7. For every monitor:
    1. Create a Gtk Window, but do not yet show it.
    2. You MUST call `gtk_session_lock_lock_new_surface(lock, window, monitor)` to prepare the window for display on the given monitor before it is realized.
    3. You SHOULD show (i.e. realize and map) the window as soon as possible. If you do not, the compositor will display a solid color.
    4. You MUST NOT create two windows on the same monitor.
+8. If you receive the `locked` signal, your session is now locked. Your compositor will not be showing any information other than your lockscreen or solid colors.
 9. You SHOULD listen to monitor connection and disconnection events and create new windows on demand.
 10. Before calling `hide` on the window, you MUST call `gtk_session_lock_unmap_lock_window(window)` on it. You MUST NOT call this method before `destroy`. This additional step is necessary to maintain compatibility with gtk-layer-shell.
 11. Once you wish to unlock the session, e.g. after you have authenticated the user, you SHOULD first call `gtk_session_lock_lock_unlock_and_destroy(lock)`.

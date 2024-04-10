@@ -24,20 +24,21 @@ def create_lock_window():
     return window
 
 def on_locked():
-    for i in range(display.get_n_monitors()):
-        window = create_lock_window()
-        monitor = display.get_monitor(i)
-        lock.new_surface(window, monitor)
-        window.show_all()
+    print("Your session is now locked.")
 
 def on_finished():
     print("Finished event received. Session could not be locked.")
+    quit()
 
 lock.connect("locked", on_locked)
 lock.connect("finished", on_finished)
 
 lock.lock_lock()
 
-
+for i in range(display.get_n_monitors()):
+    window = create_lock_window()
+    monitor = display.get_monitor(i)
+    lock.new_surface(window, monitor)
+    window.show_all()
 
 Gtk.main()
