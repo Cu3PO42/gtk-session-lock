@@ -1,3 +1,5 @@
+error('Tests are not supported yet.')
+
 subdir('test-common')
 subdir('mock-server')
 subdir('integration-test-common')
@@ -12,7 +14,7 @@ foreach integration_test : integration_tests
     exe = executable(
         integration_test,
         integration_test_srcs,
-        dependencies: [gtk, wayland_client, gtk_layer_shell, integration_test_common])
+        dependencies: [gtk, wayland_client, gtk_session_lock, integration_test_common])
     expect_fail = integration_test.endswith('expect-fail')
     test(
         integration_test,
