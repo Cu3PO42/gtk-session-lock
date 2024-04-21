@@ -27,7 +27,7 @@ from version import COMBO_FACTOR, Version
 logger = logging.getLogger(__name__)
 
 INDENT = '  ' # used for generating code
-PROJECT_NAME = 'gtk-layer-shell'
+PROJECT_NAME = 'gtk-session-lock'
 
 LGPL3_HEADER = '''
 This program is free software; you can redistribute it and/or
