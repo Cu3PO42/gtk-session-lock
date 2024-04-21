@@ -39,9 +39,4 @@ subdir('examples')
 
 if get_option('tests')
     subdir('test')
-else
-    # Add a single always-failing test to tell the user to reconfigure with tests enabled
-    py = find_program('python3')
-    tests_not_enabled_script = files(meson.current_source_dir() + '/test/tests-not-enabled.py')
-    test('Tests not enabled', py, args: [tests_not_enabled_script])
 endif
